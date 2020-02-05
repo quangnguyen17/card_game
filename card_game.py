@@ -193,9 +193,9 @@ def start_game():
     print("Congrats!" if main_player.get_wins() > main_player.get_losses()
           else f"{main_player.name} is a THUMP ASS!! XD :(() ) ;(")
 
-
+# Runs one instance of game
 def run_game(player, num):
-    # Shuffle Deck
+    # Reset and shuffle deck, reset the hand
     game_deck = Deck().random_shuffle()
     player.hand = []
     print(f"\nGame {num + 1}")
@@ -203,28 +203,24 @@ def run_game(player, num):
     # Deal 2 Cards to hand
     deal(game_deck, player)
     deal(game_deck, player)
-
+    # Keep dealing until 21 or over
     while calc_score(player.hand) < 21:
         deal(game_deck, player)
-
+    # Handle Scores
     player.add_win() if calc_score(
         player.hand, in_game=False) == 21 else player.add_loss()
 
 # helper to move last card of deck into player hand
-
-
 def deal(deck, player):
     player.add_card(deck.cards[-1])
     deck.cards.pop()
 
-# helper to calculate score
-
-
+# helper to calculate score and print game status
 def calc_score(hand, in_game=True):
     score = 0
     for card in hand:
         score += card.value
-
+    # Prints hand and score information
     if in_game:
         if len(hand) >= 2:
             your_hand_str = "Your hand:"
