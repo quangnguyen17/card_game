@@ -168,7 +168,7 @@ class Player:
 
 
 def start_game():
-    print("Start Game")
+    print("Welcome to 21!")
     name = input("Enter your name: ")
 
     # get name input & init in line below
