@@ -5,8 +5,8 @@
 # [X] build card
 # [X] build deck
 # [X] implement shuffle
-# [ ] implement a sort
-# [ ] implement a game
+# [X] implement a sort
+# [X] implement a game
 
 import random
 
@@ -42,8 +42,8 @@ class Deck():
                 # create a card
                 self.cards.append(Card(suit, value))
 
-
     # Perfect shuffles the deck
+
     def shuffle(self):
         for time in range(random.randint(5, 10)):
             mid = self.deck_length() / 2
@@ -134,76 +134,108 @@ class Deck():
             card.show_value()
         return self
 
+
 class Player:
     def __init__(self, name="", hand=[]):
         self.name = name
         self.hand = hand
         self.wins = 0
         self.losses = 0
-    
+
     def get_name(self):
         return self.name
+
     def get_hand(self):
         return self.hand
+
     def get_wins(self):
         return self.wins
+
     def get_losses(self):
         return self.losses
-    
+
     def add_card(self, new_card):
         self.hand.append(new_card)
         return self
+
     def add_win(self):
         self.wins += 1
         return self
+
     def add_loss(self):
         self.losses += 1
         return self
-    
-    
+
+
 def start_game():
     print("Start Game")
+    name = input("Enter your name: ")
+
     # get name input & init in line below
-    main_player = Player()
+    main_player = Player(name=name)
 
     # get input & run game given # times
-    runs = 1
-    for i in range(runs):
-        run_game(main_player, int)
-    
-    # game ending msg
-    print(main_player.get_wins())
-    print(main_player.get_losses())
-    print("End of Game")
+    while True:
+        runs = input("How many games you want to run: ")
+        try:
+            if int(runs) > 50 or int(runs) <= 0:
+                print("Please a valid input, 1 to 50 :(")
+            elif int(runs) <= 50:
+                break
+        except ValueError:
+            print("Please a valid input, 1 to 50, ;(")
+
+    for game in range(int(runs)):
+        run_game(main_player, game)
+
+    print(f"\nWins: {main_player.get_wins()} games.")
+    print(f"Losses: {main_player.get_losses()} games.")
+    print("Congrats!" if main_player.get_wins() > main_player.get_losses()
+          else f"{main_player.name} is a THUMP ASS!! XD :(() ) ;(")
 
 
-def run_game(player, int):
+def run_game(player, num):
     # Shuffle Deck
-    game_deck = Deck()
-    game_deck.random_shuffle()
+    game_deck = Deck().random_shuffle()
+    player.hand = []
+    print(f"\nGame {num + 1}")
+    print("shuffling deck...")
     # Deal 2 Cards to hand
     deal(game_deck, player)
     deal(game_deck, player)
+
     while calc_score(player.hand) < 21:
         deal(game_deck, player)
-    if calc_score(player.hand) == 21:
-        player.wins += 1
-    else: 
-        player.losses += 1
+
+    player.add_win() if calc_score(
+        player.hand, in_game=False) == 21 else player.add_loss()
 
 # helper to move last card of deck into player hand
+
+
 def deal(deck, player):
     player.add_card(deck.cards[-1])
     deck.cards.pop()
-    return None
 
 # helper to calculate score
-def calc_score(hand):
+
+
+def calc_score(hand, in_game=True):
     score = 0
     for card in hand:
         score += card.value
-    return score
 
+    if in_game:
+        if len(hand) >= 2:
+            your_hand_str = "Your hand:"
+
+            for card in hand:
+                your_hand_str += f" | {card.name} of {card.suit}"
+
+            print(your_hand_str)
+            print(f"Your score: {score}")
+
+    return score
 
 
 if __name__ == "__main__":
