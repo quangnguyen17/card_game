@@ -171,7 +171,7 @@ def start_game():
     print("Welcome to 21!")
     name = input("Enter your name: ")
 
-    # get name input & init in line below
+    # get name input &- init in line below
     main_player = Player(name=name)
 
     # get input & run game given # times
@@ -191,7 +191,9 @@ def start_game():
     print(f"\nWins: {main_player.get_wins()} games.")
     print(f"Losses: {main_player.get_losses()} games.")
     print("Congrats!" if main_player.get_wins() > main_player.get_losses()
-          else f"{main_player.name} is a THUMP ASS!! XD :(() ) ;(")
+          else f"{main_player.name} is a LOOOOOOOOOOOOOOOOSSSSSSSSER!! XD :(() ) ;(")
+    # print("Congrats!" if main_player.get_wins() > main_player.get_losses()
+    #      else f"{main_player.name} is a THUMP ASS!! XD :(() ) ;(")
 
 # Runs one instance of game
 def run_game(player, num):
