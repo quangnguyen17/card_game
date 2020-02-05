@@ -1,14 +1,14 @@
 # Deck of cards
 # 52 cards in a deck
 # suits hearts, spades, diamonds, clubs
+
 # [X] build card
 # [X] build deck
 # [X] implement shuffle
-# [X] implement a sort
-# [X] implement a game
+# [ ] implement a sort
+# [ ] implement a game
 
 import random
-import player
 
 
 class Card():
@@ -29,9 +29,6 @@ class Card():
         print(f"{self.name} of {self.suit}")
 
 
-# ace_of_hearts = Card('hearts', 2)
-# ace_of_hearts.show_value()
-
 class Deck():
     def __init__(self):
         self.cards = []
@@ -45,9 +42,8 @@ class Deck():
                 # create a card
                 self.cards.append(Card(suit, value))
 
-    def deck_length(self, addition=0):
-        return len(self.cards) + addition
 
+    # Perfect shuffles the deck
     def shuffle(self):
         for time in range(random.randint(5, 10)):
             mid = self.deck_length() / 2
@@ -63,6 +59,7 @@ class Deck():
 
         return self
 
+    # Randomizes the deck
     def random_shuffle(self):
         for time in range(random.randint(self.deck_length(), self.deck_length() * 5)):
             index_one = random.randint(0, self.deck_length(-1))
@@ -76,6 +73,11 @@ class Deck():
 
         return self
 
+    # helper for random_shuffle
+    def deck_length(self, addition=0):
+        return len(self.cards) + addition
+
+    # Sorts Deck to Suites then Numbers
     def sort(self):
         hearts = []
         clubs = []
@@ -126,20 +128,83 @@ class Deck():
             suit.pop(min_idx)
         return answer
 
-    def game(self):
-
-        pass
-
-    def game_21(self):
-        is_21 = False
-
-        pass
-
     def show_deck(self):
+        print("*" * 50)
         for card in self.cards:
             card.show_value()
         return self
 
+class Player:
+    def __init__(self, name="", hand=[]):
+        self.name = name
+        self.hand = hand
+        self.wins = 0
+        self.losses = 0
+    
+    def get_name(self):
+        return self.name
+    def get_hand(self):
+        return self.hand
+    def get_wins(self):
+        return self.wins
+    def get_losses(self):
+        return self.losses
+    
+    def add_card(self, new_card):
+        self.hand.append(new_card)
+        return self
+    def add_win(self):
+        self.wins += 1
+        return self
+    def add_loss(self):
+        self.losses += 1
+        return self
+    
+    
+def start_game():
+    print("Start Game")
+    # get name input & init in line below
+    main_player = Player()
 
-bicycle_deck = Deck()
-bicycle_deck.shuffle().random_shuffle().show_deck()
+    # get input & run game given # times
+    runs = 1
+    for i in range(runs):
+        run_game(main_player, int)
+    
+    # game ending msg
+    print(main_player.get_wins())
+    print(main_player.get_losses())
+    print("End of Game")
+
+
+def run_game(player, int):
+    # Shuffle Deck
+    game_deck = Deck()
+    game_deck.random_shuffle()
+    # Deal 2 Cards to hand
+    deal(game_deck, player)
+    deal(game_deck, player)
+    while calc_score(player.hand) < 21:
+        deal(game_deck, player)
+    if calc_score(player.hand) == 21:
+        player.wins += 1
+    else: 
+        player.losses += 1
+
+# helper to move last card of deck into player hand
+def deal(deck, player):
+    player.add_card(deck.cards[-1])
+    deck.cards.pop()
+    return None
+
+# helper to calculate score
+def calc_score(hand):
+    score = 0
+    for card in hand:
+        score += card.value
+    return score
+
+
+
+if __name__ == "__main__":
+    start_game()
